@@ -107,10 +107,20 @@ class IncomingCallActivity : Activity() {
         setContentView(R.layout.activity_call_incoming)
         initView()
         updateViewWithIncomingIntentData(intent)
-        registerReceiver(
-                endedCallKeepBroadcastReceiver,
-                IntentFilter("${packageName}.${ACTION_ENDED_CALL_INCOMING}")
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                    endedCallKeepBroadcastReceiver,
+                    IntentFilter("${packageName}.${ACTION_ENDED_CALL_INCOMING}"),
+                    RECEIVER_EXPORTED
+            )
+        }
+        else
+        {
+            registerReceiver(
+                    endedCallKeepBroadcastReceiver,
+                    IntentFilter("${packageName}.${ACTION_ENDED_CALL_INCOMING}"),
+            )
+        }
     }
 
     private fun wakeLockRequest(duration: Long) {
